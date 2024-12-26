@@ -1,16 +1,62 @@
-# apply_at_supono
+# Apply At Supono
 
-A new Flutter project.
+A Flutter application that provides photo capture and preview functionality with integrated ads.
+
+## Features
+
+- Camera integration for photo capture
+- Photo preview with editing capabilities
+- Onboarding flow for first-time users
+- Settings management
+- Google AdMob integration
+- Support for both iOS and Android platforms
+
+## Technical Details
+
+### Platform Support
+- iOS (12.0+)
+- Android
+
+### Key Dependencies
+- Flutter SDK
+- Camera plugins for photo capture
+- Google Mobile Ads SDK
+- Other Flutter dependencies (check pubspec.yaml for complete list)
+
+### Project Structure
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. **Prerequisites**
+   - Flutter SDK installed
+   - iOS development tools (for iOS development)
+   - Android Studio (for Android development)
+   - Valid Google AdMob account and app IDs
 
-A few resources to get you started if this is your first Flutter project:
+2. **Setup**
+   - Clone the repository
+   - Run `flutter pub get` to install dependencies
+   - Configure your AdMob IDs in:
+     - iOS: `ios/Runner/Info.plist`
+     - Android: `android/app/src/main/AndroidManifest.xml`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. **Running the App**
+   ```bash
+   flutter run
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Development
+
+### iOS Configuration
+- Minimum iOS version: 12.0
+- Required permissions:
+  - Camera access
+  - Photo library access
+- AdMob ID configured in Info.plist
+
+### Android Configuration
+- Required permissions:
+  - Camera
+  - Internet
+- AdMob ID configured in AndroidManifest.xml
+
