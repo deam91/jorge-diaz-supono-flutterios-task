@@ -1,0 +1,28 @@
+name: apply_at_supono
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.3.4 # For storing onboarding state
+  google_mobile_ads: ^5.2.0 # For Google AdMob integration
+  rate_my_app: ^2.2.0 # For native rating prompt
+  image_picker: ^1.1.2 # To manage camera and photo picking
+  camera: ^0.11.0+2
+  intl: ^0.20.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
