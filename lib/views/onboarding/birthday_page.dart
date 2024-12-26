@@ -25,6 +25,42 @@ class _BirthdayPageState extends State<BirthdayPage> {
   final FocusNode _monthFocus = FocusNode();
   final FocusNode _yearFocus = FocusNode();
 
+  bool _isDateValid() {
+    if (_dayController.text.isEmpty ||
+        _monthController.text.isEmpty ||
+        _yearController.text.isEmpty) {
+      return false;
+    }
+
+    try {
+      final day = int.parse(_dayController.text);
+      final month = int.parse(_monthController.text);
+      final year = int.parse(_yearController.text);
+
+      final birthDate = DateTime(year, month, day);
+      final today = DateTime.now();
+
+      // Check if it's a valid date
+      if (birthDate.year != year ||
+          birthDate.month != month ||
+          birthDate.day != day) {
+        return false;
+      }
+
+      // Calculate age
+      final age = today.year -
+          birthDate.year -
+          (today.month < birthDate.month ||
+                  (today.month == birthDate.month && today.day < birthDate.day)
+              ? 1
+              : 0);
+
+      return age >= 18;
+    } catch (e) {
+      return false;
+    }
+  }
+
   String? _validateDay(String? value) {
     if (value == null || value.isEmpty) {
       return 'Required';
@@ -45,7 +81,7 @@ class _BirthdayPageState extends State<BirthdayPage> {
         return 'Invalid for month';
       }
     }
-    return null;
+    return _isDateValid() ? null : 'Must be 18+';
   }
 
   String? _validateMonth(String? value) {
@@ -56,7 +92,7 @@ class _BirthdayPageState extends State<BirthdayPage> {
     if (month == null || month < 1 || month > 12) {
       return 'Invalid month';
     }
-    return null;
+    return _isDateValid() ? null : 'Must be 18+';
   }
 
   String? _validateYear(String? value) {
@@ -68,7 +104,7 @@ class _BirthdayPageState extends State<BirthdayPage> {
     if (year == null || year < 1900 || year > currentYear) {
       return 'Invalid year';
     }
-    return null;
+    return _isDateValid() ? null : 'Must be 18+';
   }
 
   bool get _isValid {
