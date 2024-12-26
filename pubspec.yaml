@@ -16,13 +16,32 @@ dependencies:
   image_picker: ^1.1.2 # To manage camera and photo picking
   camera: ^0.11.0+2
   intl: ^0.20.1
+  path_provider: ^2.1.5
+  flutter_image_compress: ^2.3.0
+  image: ^4.1.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.4.4
+  build_runner: ^2.4.8
   flutter_lints: ^5.0.0
+  path_provider_platform_interface: ^2.1.2
+  plugin_platform_interface: ^2.1.8
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/fonts/
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Lato-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Lato-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700

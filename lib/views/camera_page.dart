@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:apply_at_supono/constants/app_colors.dart';
+import 'package:apply_at_supono/utils/error_handler.dart';
+import 'package:apply_at_supono/utils/image_utils.dart';
 import 'package:apply_at_supono/views/preview_page.dart';
 import 'package:apply_at_supono/widgets/circular_button.dart';
 import 'package:camera/camera.dart';
@@ -23,35 +27,47 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future<void> _initCamera() async {
-    final cameras = await availableCameras();
-    if (cameras.isEmpty) return;
-
-    final camera = cameras[_isFrontCamera ? 1 : 0];
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.max,
-      enableAudio: false,
-    );
-
     try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) return;
+
+      _controller = CameraController(
+        cameras[_isFrontCamera ? 1 : 0],
+        ResolutionPreset.high,
+        enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.jpeg,
+      );
+
       await _controller!.initialize();
-      if (mounted) {
-        setState(() {
-          _isCameraInitialized = true;
-        });
-      }
+      if (!mounted) return;
+
+      setState(() {
+        _isCameraInitialized = true;
+      });
     } catch (e) {
-      print('Error initializing camera: $e');
+      ErrorHandler.handleError(
+        context,
+        e,
+        fallbackMessage: 'Failed to initialize camera',
+      );
     }
   }
 
   Future<void> _switchCamera() async {
-    setState(() {
-      _isFrontCamera = !_isFrontCamera;
-      _isCameraInitialized = false;
-    });
-    await _controller?.dispose();
-    await _initCamera();
+    try {
+      setState(() {
+        _isFrontCamera = !_isFrontCamera;
+        _isCameraInitialized = false;
+      });
+      await _controller?.dispose();
+      await _initCamera();
+    } catch (e) {
+      ErrorHandler.handleError(
+        context,
+        e,
+        fallbackMessage: 'Failed to switch camera',
+      );
+    }
   }
 
   Future<void> _takePicture() async {
@@ -59,15 +75,22 @@ class _CameraPageState extends State<CameraPage> {
 
     try {
       final image = await _controller!.takePicture();
-      if (mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PreviewPage(imagePath: image.path),
-          ),
-        );
-      }
+      if (!mounted) return;
+
+      // Compress image before preview
+      final compressedImage = await ImageUtils.compressImage(File(image.path));
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PreviewPage(imagePath: compressedImage.path),
+        ),
+      );
     } catch (e) {
-      print('Error taking picture: $e');
+      ErrorHandler.handleError(
+        context,
+        e,
+        fallbackMessage: 'Failed to take picture',
+      );
     }
   }
 
@@ -95,8 +118,9 @@ class _CameraPageState extends State<CameraPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Camera Preview
-          CameraPreview(_controller!),
+          if (_controller != null)
+            // Camera Preview
+            CameraPreview(_controller!),
 
           // Top Controls
           Positioned(

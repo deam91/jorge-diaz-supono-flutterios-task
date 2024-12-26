@@ -1,3 +1,4 @@
+import 'package:apply_at_supono/services/ad_service.dart';
 import 'package:apply_at_supono/views/camera_page.dart';
 import 'package:apply_at_supono/views/onboarding_page.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize Google Mobile Ads
   MobileAds.instance.initialize();
+
+  // Preload the first banner ad
+  await AdService.loadBannerAd();
 
   // Check if this is the first run
   final prefs = await SharedPreferences.getInstance();

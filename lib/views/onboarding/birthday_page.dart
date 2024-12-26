@@ -1,5 +1,6 @@
 import 'package:apply_at_supono/constants/app_colors.dart';
 import 'package:apply_at_supono/constants/text_styles.dart';
+import 'package:apply_at_supono/utils/error_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,34 +17,58 @@ class BirthdayPage extends StatefulWidget {
 }
 
 class _BirthdayPageState extends State<BirthdayPage> {
+  final _dayController = TextEditingController();
+  final _monthController = TextEditingController();
+  final _yearController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _dayController = TextEditingController(text: '');
-  final TextEditingController _monthController =
-      TextEditingController(text: '');
-  final TextEditingController _yearController = TextEditingController(text: '');
 
   final FocusNode _dayFocus = FocusNode();
   final FocusNode _monthFocus = FocusNode();
   final FocusNode _yearFocus = FocusNode();
 
   String? _validateDay(String? value) {
-    if (value == null || value.isEmpty) return '';
+    if (value == null || value.isEmpty) {
+      return 'Required';
+    }
     final day = int.tryParse(value);
-    if (day == null || day < 1 || day > 31) return '';
+    if (day == null || day < 1 || day > 31) {
+      return 'Invalid day';
+    }
+    // Validate day based on month
+    final month = int.tryParse(_monthController.text);
+    if (month != null) {
+      final daysInMonth = DateTime(
+        int.tryParse(_yearController.text) ?? DateTime.now().year,
+        month + 1,
+        0,
+      ).day;
+      if (day > daysInMonth) {
+        return 'Invalid for month';
+      }
+    }
     return null;
   }
 
   String? _validateMonth(String? value) {
-    if (value == null || value.isEmpty) return '';
+    if (value == null || value.isEmpty) {
+      return 'Required';
+    }
     final month = int.tryParse(value);
-    if (month == null || month < 1 || month > 12) return '';
+    if (month == null || month < 1 || month > 12) {
+      return 'Invalid month';
+    }
     return null;
   }
 
   String? _validateYear(String? value) {
-    if (value == null || value.isEmpty) return '';
+    if (value == null || value.isEmpty) {
+      return 'Required';
+    }
     final year = int.tryParse(value);
-    if (year == null || year < 1900 || year > DateTime.now().year) return '';
+    final currentYear = DateTime.now().year;
+    if (year == null || year < 1900 || year > currentYear) {
+      return 'Invalid year';
+    }
     return null;
   }
 
@@ -106,6 +131,8 @@ class _BirthdayPageState extends State<BirthdayPage> {
                 if (validator?.call(value) == null && nextFocus != null) {
                   focusNode.unfocus();
                   FocusScope.of(context).requestFocus(nextFocus);
+                } else {
+                  ErrorHandler.showError(context, validator?.call(value) ?? '');
                 }
               }
             },
