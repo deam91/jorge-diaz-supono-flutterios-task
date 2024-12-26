@@ -1,6 +1,5 @@
 import 'package:apply_at_supono/constants/app_colors.dart';
 import 'package:apply_at_supono/constants/text_styles.dart';
-import 'package:apply_at_supono/utils/error_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -120,7 +119,6 @@ class _BirthdayPageState extends State<BirthdayPage> {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(maxLength),
             ],
-            textAlign: TextAlign.center,
             style: AppTextStyles.titleXLarge,
             validator: validator,
             autovalidateMode: AutovalidateMode.onUnfocus,
@@ -131,8 +129,6 @@ class _BirthdayPageState extends State<BirthdayPage> {
                 if (validator?.call(value) == null && nextFocus != null) {
                   focusNode.unfocus();
                   FocusScope.of(context).requestFocus(nextFocus);
-                } else {
-                  ErrorHandler.showError(context, validator?.call(value) ?? '');
                 }
               }
             },
@@ -165,7 +161,8 @@ class _BirthdayPageState extends State<BirthdayPage> {
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(color: Colors.red),
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 15),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             ),
           ),
         ),

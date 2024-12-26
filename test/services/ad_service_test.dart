@@ -2,15 +2,16 @@ import 'package:apply_at_supono/services/ad_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  late AdServiceImpl adService;
 
   setUp(() {
-    AdService.reset();
+    adService = AdServiceImpl();
+    adService.reset();
   });
 
   group('AdService Tests', () {
     test('loadBannerAd returns null when ad fails to load', () async {
-      final ad = await AdService.loadBannerAd();
+      final ad = await adService.loadBannerAd();
       expect(ad, isNull);
     });
   });

@@ -1,3 +1,4 @@
+import 'package:apply_at_supono/core/service_locator.dart';
 import 'package:apply_at_supono/services/ad_service.dart';
 import 'package:apply_at_supono/views/camera_page.dart';
 import 'package:apply_at_supono/views/onboarding_page.dart';
@@ -14,8 +15,11 @@ void main() async {
   // Initialize Google Mobile Ads
   MobileAds.instance.initialize();
 
+  // Setup service locator
+  setupServiceLocator();
+
   // Preload the first banner ad
-  await AdService.loadBannerAd();
+  await getIt.get<AdService>().loadBannerAd();
 
   // Check if this is the first run
   final prefs = await SharedPreferences.getInstance();
